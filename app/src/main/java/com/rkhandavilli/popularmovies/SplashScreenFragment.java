@@ -1,6 +1,5 @@
 package com.rkhandavilli.popularmovies;
 
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -71,7 +70,7 @@ public class SplashScreenFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_splash_screen, container, false);
 
         if (savedInstanceState != null) {
-            Log.d(LOG_TAG, "onCreateView - retrieve from saved list");
+            // Log.d(LOG_TAG, "onCreateView - retrieve from saved list");
             movieDetailList = savedInstanceState.getParcelableArrayList("savedMovieList");
         }
 
@@ -117,7 +116,9 @@ public class SplashScreenFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
+        FetchMoviesTask fetchMoviesTask = new FetchMoviesTask();
+        fetchMoviesTask.execute();
+/*
         // if movie list has not been fetched before, start async task to fetch movie detail
         if (movieDetailList.isEmpty()) {
             Log.d(LOG_TAG, "onStart - no saved list");
@@ -126,10 +127,11 @@ public class SplashScreenFragment extends Fragment {
         } else {
 
             // movie list has already been fetched, clear and reset ArrayAdapter
-            Log.d(LOG_TAG, "onStart - retrieving saved list");
+            Log.d(LOG_TAG, "onStart - displaying saved list");
             movieListAdapter.clear();
             movieListAdapter.addAll(movieDetailList);
         }
+*/
 
     }
 
@@ -138,7 +140,7 @@ public class SplashScreenFragment extends Fragment {
         super.onSaveInstanceState(outState);
 
         // save the movie list fetched from TMDB
-        Log.d(LOG_TAG, "in onSaveInstanceState");
+        // Log.d(LOG_TAG, "in onSaveInstanceState");
         outState.putParcelableArrayList("savedMovieList", movieDetailList);
     }
 
@@ -181,19 +183,19 @@ public class SplashScreenFragment extends Fragment {
 
              if (sortOrderPref.equals(getString(R.string.pref_sort_order_most_popular))) {
 
-             // Fetch the most popular movies
+                 // Fetch the most popular movies
                 fetchMoviesUri = Uri.parse(TMDB_POPULAR_URL).buildUpon()
                         .appendQueryParameter(API_KEY_PARAM, apiKey)
                         .build();
             } else if (sortOrderPref.equals(getString(R.string.pref_sort_order_highest_rated))) {
 
-            // Fetch the highest rated movies
+                 // Fetch the highest rated movies
                 fetchMoviesUri = Uri.parse(TMDB_TOP_RATED_URL).buildUpon()
                         .appendQueryParameter(API_KEY_PARAM, apiKey)
                         .build();
 
             } else {
-                Log.d(LOG_TAG, "Invalid sort order parameter; " + sortOrderPref + ". Preference set to Most popular");
+                // Log.d(LOG_TAG, "Invalid sort order parameter; " + sortOrderPref + ". Preference set to Most popular");
                 return null;
             }
 
